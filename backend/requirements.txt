@@ -1,0 +1,31 @@
+fastapi
+uvicorn[standard]
+
+openai
+pydantic-settings
+python-dotenv
+
+duckduckgo-search
+
+sqlalchemy
+
+passlib[bcrypt]>=1.7.4
+bcrypt<4.0
+
+python-jose[cryptography]
+cryptography
+
+yfinance
+youtube-transcript-api
+python-nmap
+psutil
+python-multipart
+
+pywebview
+pillow
+
+# Ghost mode dependencies are optional,
+# but we keep them here for your build.
+pyautogui
+requests
+email-validator

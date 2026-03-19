@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOVA PRIME // ZENITH</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --bg: #030305;
+            --glass: rgba(20, 20, 25, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --green: #10b981;
+            --text: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--glass);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 10;
+            backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: white;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .btn-new {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .btn-new:hover {
+            background: rgba(59, 130, 246, 0.18);
+            border-color: var(--blue);
+        }
+
+        /* MODES */
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+            color: #9a9a9a;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-card.active {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: var(--blue);
+            color: white;
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #000 60%);
+        }
+
+        #chat-window {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px 12% 140px 12%;
+            scroll-behavior: smooth;
+        }
+
+        /* MESSAGES */
+        .msg {
+            display: flex;
+            margin-bottom: 20px;
+            flex-direction: column;
+            animation: fadeIn 0.25s;
+        }
+
+        .bubble {
+            padding: 14px 18px;
+            border-radius: 18px;
+            line-height: 1.55;
+            max-width: 85%;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .user .bubble {
+            align-self: flex-end;
+            background: var(--blue);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai .bubble {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* INPUT */
+        .input-area {
+            position: absolute;
+            bottom: 26px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(760px, 90vw);
+            background: rgba(30, 30, 30, 0.82);
+            backdrop-filter: blur(18px);
+            padding: 8px 10px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-box {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 14px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .send-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:active {
+            transform: scale(0.98);
+        }
+
+        .welcome {
+            text-align: center;
+            margin-top: 30vh;
+            opacity: 0.3;
+        }
+
+        .welcome h1 {
+            font-size: 4.6rem;
+            margin: 0;
+            letter-spacing: -2px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="brand"><i class="ph ph-sparkle"></i> NOVA OS</div>
+        <button class="btn-new" onclick="location.reload()">+ New Session</button>
+
+        <div class="mode-grid">
+            <div class="mode-card active" onclick="setMode('operator', this)">EXEC</div>
+            <div class="mode-card" onclick="setMode('researcher', this)">WEB</div>
+            <div class="mode-card" onclick="setMode('builder', this)">CODE</div>
+            <div class="mode-card" onclick="setMode('ghost', this)">GHOST</div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div id="chat-window">
+            <div class="welcome">
+                <h1>NOVA</h1>
+                <p>ONLINE</p>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="input-box" id="msg" placeholder="Command..." />
+            <button class="send-btn" onclick="send()"><i class="ph ph-arrow-up"></i></button>
+        </div>
+    </main>
+
+    <script>
+        // CRITICAL: use same-origin relative API
+        const API = "/api/v1";
+
+        console.log("API base:", API, "origin:", window.location.origin);
+
+        let mode = "operator";
+        let chatId = "new";
+
+        function setMode(m, el) {
+            mode = m;
+            document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function createBubble(role) {
+            const win = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.className = `msg ${role}`;
+            const bub = document.createElement('div');
+            bub.className = 'bubble';
+            div.appendChild(bub);
+            win.appendChild(div);
+            return bub;
+        }
+
+        function addMsg(text, role) {
+            const b = createBubble(role);
+            b.innerHTML = format(text);
+        }
+
+        function format(text) {
+            return (text || "")
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\n/g, '<br>');
+        }
+
+        async function send() {
+            const input = document.getElementById('msg');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const welcome = document.querySelector('.welcome');
+            if (welcome) welcome.remove();
+
+            addMsg(txt, 'user');
+            input.value = "";
+
+            let bubble = createBubble('ai');
+            let reply = "";
+
+            try {
+                console.log("Sending to:", `${API}/chat_stream/`);
+
+                const res = await fetch(`${API}/chat_stream/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: "user",
+                        message: txt,
+                        mode: mode,
+                        chat_id: chatId
+                    })
+                });
+
+                if (!res.ok) {
+                    const t = await res.text();
+                    bubble.innerHTML = format(`Backend error ${res.status}: ${t.slice(0, 400)}`);
+                    console.error("Backend error:", res.status, t);
+                    return;
+                }
+
+                if (!res.body) {
+                    bubble.innerHTML = format("No streaming body received.");
+                    console.error("No response body");
+                    return;
+                }
+
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    if (!chunk) continue;
+
+                    reply += chunk;
+                    bubble.innerHTML = format(reply);
+                    document.getElementById('chat-window').scrollTop = 999999;
+                }
+
+            } catch (e) {
+                bubble.innerHTML = format(`Network failure: ${e.message}`);
+                console.error("Network failure:", e);
+            }
+        }
+
+        document.getElementById('msg')
+            .addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
+    </script>
+</body>
+
+</html>
